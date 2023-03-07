@@ -46,8 +46,8 @@ public class HouseController {
         return hs.removeFaculty(id);
     }
 
-    @GetMapping("/{color}")
-    public List<Faculty> getFacultyByColor(@PathVariable String color) {
+    @GetMapping
+    public List<Faculty> getFacultyByColor(@RequestParam String color) {
         return hs.getFacultyByColor(color);
     }
 }

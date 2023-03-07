@@ -46,8 +46,8 @@ public class StudentController {
         return ss.removeStudent(id);
     }
 
-    @GetMapping("/{age}")
-    public List<Student> getStudentsByAge(@PathVariable int age) {
+    @GetMapping
+    public List<Student> getStudentsByAge(@RequestParam int age) {
         return ss.getByAge(age);
     }
 }
