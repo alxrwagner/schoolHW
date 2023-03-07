@@ -26,8 +26,11 @@ public class StudentService {
     }
 
     public Student editStudent(Student student){
-        studentMap.put(student.getId(), student);
-        return student;
+        if (studentMap.containsKey(student.getId())) {
+            studentMap.put(student.getId(), student);
+            return student;
+        }
+        return null;
     }
 
     public Student removeStudent(Long id){

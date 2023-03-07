@@ -1,6 +1,8 @@
 package ru.hogwarts.schoolHW.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.schoolHW.model.Faculty;
 import ru.hogwarts.schoolHW.service.HouseService;
@@ -17,8 +19,12 @@ public class HouseController {
     }
 
     @GetMapping("/faculties/{id}")
-    public Faculty getFacultyById(@PathVariable Long id) {
-        return hs.findFaculty(id);
+    public ResponseEntity<Faculty> getFacultyById(@PathVariable Long id) {
+        Faculty faculty = hs.findFaculty(id);
+        if (faculty == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(faculty);
     }
 
     @PostMapping("/faculties")
@@ -27,8 +33,12 @@ public class HouseController {
     }
 
     @PutMapping("/faculties")
-    public Faculty editFaculty(@RequestBody Faculty faculty) {
-        return hs.editFaculty(faculty);
+    public ResponseEntity<Faculty> editFaculty(@RequestBody Faculty faculty) {
+        Faculty faculty1 = hs.editFaculty(faculty);
+        if (faculty1 == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.ok(faculty1);
     }
 
     @DeleteMapping("/faculties/{id}")
