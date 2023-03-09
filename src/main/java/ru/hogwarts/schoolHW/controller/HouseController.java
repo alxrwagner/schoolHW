@@ -1,6 +1,5 @@
 package ru.hogwarts.schoolHW.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,13 +11,13 @@ import java.util.List;
 @RestController
 @RequestMapping("faculty")
 public class HouseController {
-    private HouseService hs;
+    private final HouseService hs;
 
     public HouseController(HouseService hs) {
         this.hs = hs;
     }
 
-    @GetMapping("/faculties/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Faculty> getFacultyById(@PathVariable Long id) {
         Faculty faculty = hs.findFaculty(id);
         if (faculty == null) {
@@ -27,12 +26,12 @@ public class HouseController {
         return ResponseEntity.ok(faculty);
     }
 
-    @PostMapping("/faculties")
+    @PostMapping("/create")
     public Faculty createFaculty(@RequestBody Faculty faculty) {
         return hs.createFaculty(faculty);
     }
 
-    @PutMapping("/faculties")
+    @PutMapping("/edit")
     public ResponseEntity<Faculty> editFaculty(@RequestBody Faculty faculty) {
         Faculty faculty1 = hs.editFaculty(faculty);
         if (faculty1 == null){
@@ -41,9 +40,10 @@ public class HouseController {
         return ResponseEntity.ok(faculty1);
     }
 
-    @DeleteMapping("/faculties/{id}")
-    public Faculty removeFaculty(@PathVariable Long id) {
-        return hs.removeFaculty(id);
+    @DeleteMapping("/remove/{id}")
+    public ResponseEntity<Faculty> removeFaculty(@PathVariable Long id) {
+        hs.removeFaculty(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping

@@ -1,6 +1,5 @@
 package ru.hogwarts.schoolHW.controller;
 
-import ch.qos.logback.core.joran.conditional.IfAction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,13 +11,13 @@ import java.util.List;
 @RestController
 @RequestMapping("student")
 public class StudentController {
-    private StudentService ss;
+    private final StudentService ss;
 
     public StudentController(StudentService ss) {
         this.ss = ss;
     }
 
-    @GetMapping("/students/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
         Student student = ss.findStudent(id);
         if (student == null) {
@@ -27,12 +26,12 @@ public class StudentController {
         return ResponseEntity.ok(student);
     }
 
-    @PostMapping("/students")
+    @PostMapping("/create")
     public Student createStudent(@RequestBody Student student) {
         return ss.createStudent(student);
     }
 
-    @PutMapping("/students")
+    @PutMapping("/edit")
     public ResponseEntity<Student> editStudent(@RequestBody Student student) {
         Student student1 = ss.editStudent(student);
         if (student1 == null) {
@@ -41,9 +40,10 @@ public class StudentController {
         return ResponseEntity.ok(student1);
     }
 
-    @DeleteMapping("/students/{id}")
-    public Student removeStudent(@PathVariable Long id) {
-        return ss.removeStudent(id);
+    @DeleteMapping("/remove/{id}")
+    public ResponseEntity<Student> removeStudent(@PathVariable Long id) {
+        ss.removeStudent(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping
