@@ -15,6 +15,7 @@ public class HouseService {
     }
 
     public Faculty createFaculty(Faculty faculty){
+        faculty.setId(null);
         return facultyRepository.save(faculty);
     }
 

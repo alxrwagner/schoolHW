@@ -15,6 +15,7 @@ public class StudentService {
     }
 
     public Student createStudent(Student student){
+        student.setId(null);
         return studentRepository.save(student);
     }
 
