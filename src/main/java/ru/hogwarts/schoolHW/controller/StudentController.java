@@ -3,6 +3,8 @@ package ru.hogwarts.schoolHW.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.schoolHW.dto.FacultyDTO;
+import ru.hogwarts.schoolHW.dto.StudentDTO;
 import ru.hogwarts.schoolHW.model.Student;
 import ru.hogwarts.schoolHW.service.StudentService;
 
@@ -18,26 +20,26 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
-        Student student = ss.findStudent(id);
-        if (student == null) {
+    public ResponseEntity<StudentDTO> getStudentById(@PathVariable Long id) {
+        StudentDTO studentDTO = ss.findStudent(id);
+        if (studentDTO == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(student);
+        return ResponseEntity.ok(studentDTO);
     }
 
     @PostMapping("/create")
-    public Student createStudent(@RequestBody Student student) {
-        return ss.createStudent(student);
+    public StudentDTO createStudent(@RequestBody StudentDTO studentDTO) {
+        return ss.createStudent(studentDTO);
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<Student> editStudent(@RequestBody Student student) {
-        Student student1 = ss.editStudent(student);
-        if (student1 == null) {
+    public ResponseEntity<StudentDTO> editStudent(@RequestBody StudentDTO studentDTO) {
+        StudentDTO student = ss.editStudent(studentDTO);
+        if (student == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        return ResponseEntity.ok(student1);
+        return ResponseEntity.ok(student);
     }
 
     @DeleteMapping("/remove/{id}")
@@ -47,7 +49,18 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<Student> getStudentsByAge(@RequestParam int age) {
-        return ss.getByAge(age);
+    public ResponseEntity<List<StudentDTO>> getStudentsByAge(@RequestParam Integer min, @RequestParam(required = false) Integer max) {
+        if (min != null && max != null) {
+            return ResponseEntity.ok(ss.findByAgeBetween(min, max));
+        } else if (min != null) {
+            return ResponseEntity.ok(ss.getByAge(min));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/{id}/faculty")
+    public ResponseEntity<FacultyDTO> findFacultyByStudentId(@PathVariable Long id) {
+        FacultyDTO facultyDTO = ss.findFacultyByStudentId(id);
+        return ResponseEntity.ok(facultyDTO);
     }
 }

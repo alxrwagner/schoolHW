@@ -1,10 +1,14 @@
 package ru.hogwarts.schoolHW.service;
 
 import org.springframework.stereotype.Service;
+import ru.hogwarts.schoolHW.dto.FacultyDTO;
+import ru.hogwarts.schoolHW.dto.StudentDTO;
 import ru.hogwarts.schoolHW.model.Faculty;
 import ru.hogwarts.schoolHW.repository.FacultyRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class HouseService {
@@ -14,24 +18,47 @@ public class HouseService {
         this.facultyRepository = facultyRepository;
     }
 
-    public Faculty createFaculty(Faculty faculty){
-        faculty.setId(null);
-        return facultyRepository.save(faculty);
+    public FacultyDTO createFaculty(FacultyDTO facultyDTO){
+        facultyDTO.setId(null);
+        Faculty faculty = facultyDTO.toFaculty();
+        faculty.setStudents(new ArrayList<>());
+        return FacultyDTO.fromFaculty(facultyRepository.save(faculty));
     }
 
-    public Faculty findFaculty(Long id){
-        return facultyRepository.findById(id).get();
+    public FacultyDTO findFaculty(Long id){
+        Faculty faculty = facultyRepository.findById(id).orElse(null);
+        if (faculty != null){
+            return FacultyDTO.fromFaculty(faculty);
+        }
+        return null;
     }
 
-    public Faculty editFaculty(Faculty faculty){
-       return facultyRepository.save(faculty);
+    public FacultyDTO editFaculty(FacultyDTO facultyDTO){
+        Faculty faculty = facultyDTO.toFaculty();
+       return FacultyDTO.fromFaculty(facultyRepository.save(faculty));
     }
 
     public void removeFaculty(Long id){
         facultyRepository.deleteById(id);
     }
 
-    public List<Faculty> getFacultyByColor(String color){
-        return facultyRepository.findByColor(color);
+    public List<FacultyDTO> getFacultyByColor(String color){
+        List<Faculty> faculties = facultyRepository.findByColorIgnoreCase(color);
+        List<FacultyDTO> facultyDTOs = new ArrayList<>();
+        return facultyDTOs = faculties.stream().map(FacultyDTO::fromFaculty).collect(Collectors.toList());
+    }
+
+    public List<FacultyDTO> findByName(String name){
+        List<Faculty> faculties = facultyRepository.findByNameIgnoreCase(name);
+        List<FacultyDTO> facultyDTOs = new ArrayList<>();
+        return facultyDTOs = faculties.stream().map(FacultyDTO::fromFaculty).collect(Collectors.toList());
+    }
+
+    public List<StudentDTO> getStudentsByFacultyId(Long id){
+        Faculty faculty = facultyRepository.findById(id).orElse(null);
+        if (faculty != null){
+            return faculty.getStudents().stream().map(StudentDTO::fromStudent).collect(Collectors.toList());
+        }
+        return null;
     }
 }
