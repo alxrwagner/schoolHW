@@ -1,5 +1,7 @@
 package ru.hogwarts.schoolHW.controller;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -80,8 +82,8 @@ public class StudentController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<StudentDTO>> getAllStudents(@RequestParam("page") Integer pageNumber, @RequestParam("size") Integer pageSize) {
-        List<StudentDTO> studentDTOS = ss.getAllStudents(pageNumber, pageSize);
+    public ResponseEntity<List<StudentDTO>> getAllStudents(@PageableDefault(size = 10) Pageable pageable) {
+        List<StudentDTO> studentDTOS = ss.getAllStudents(pageable);
         return ResponseEntity.ok(studentDTOS);
     }
 }
