@@ -11,7 +11,7 @@ import ru.hogwarts.schoolHW.service.StudentService;
 import java.util.List;
 
 @RestController
-@RequestMapping("student")
+@RequestMapping("/student")
 public class StudentController {
     private final StudentService ss;
 
@@ -62,5 +62,26 @@ public class StudentController {
     public ResponseEntity<FacultyDTO> findFacultyByStudentId(@PathVariable Long id) {
         FacultyDTO facultyDTO = ss.findFacultyByStudentId(id);
         return ResponseEntity.ok(facultyDTO);
+    }
+
+    @GetMapping("/count")
+    public Long getCountStudents() {
+        return ss.getCountStudents();
+    }
+
+    @GetMapping("/middle-age")
+    public Long getMiddleAge() {
+        return ss.getMiddleAge();
+    }
+
+    @GetMapping("/youngest")
+    public List<StudentDTO> getYoungest() {
+        return ss.getYoungestStudents();
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<StudentDTO>> getAllStudents(@RequestParam("page") Integer pageNumber, @RequestParam("size") Integer pageSize) {
+        List<StudentDTO> studentDTOS = ss.getAllStudents(pageNumber, pageSize);
+        return ResponseEntity.ok(studentDTOS);
     }
 }

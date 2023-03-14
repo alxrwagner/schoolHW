@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
-@RequestMapping("faculty")
+@RequestMapping("/faculty")
 public class HouseController {
     private final HouseService hs;
 
