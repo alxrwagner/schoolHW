@@ -51,11 +51,16 @@ public class StudentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<StudentDTO>> getStudentsByAge(@RequestParam Integer min, @RequestParam(required = false) Integer max) {
+    public ResponseEntity<List<StudentDTO>> getStudentsByAge(@RequestParam(required = false) Integer min,
+                                                             @RequestParam(required = false) Integer max,
+                                                             @PageableDefault(size = 50) Pageable pageable) {
         if (min != null && max != null) {
             return ResponseEntity.ok(ss.findByAgeBetween(min, max));
         } else if (min != null) {
             return ResponseEntity.ok(ss.getByAge(min));
+        } else if (min == null && max == null) {
+            List<StudentDTO> studentDTOS = ss.getAllStudents(pageable);
+            return ResponseEntity.ok(studentDTOS);
         }
         return ResponseEntity.badRequest().build();
     }
@@ -81,9 +86,4 @@ public class StudentController {
         return ss.getYoungestStudents();
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<StudentDTO>> getAllStudents(@PageableDefault(size = 50) Pageable pageable) {
-        List<StudentDTO> studentDTOS = ss.getAllStudents(pageable);
-        return ResponseEntity.ok(studentDTOS);
-    }
 }

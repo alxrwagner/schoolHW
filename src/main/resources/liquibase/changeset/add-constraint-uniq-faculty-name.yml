@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-constraint-faculty
+      author: wagner
+      changes:
+        - addUniqueConstraint:
+            columnNames: name
+            constraintName: uniq_faculty_name
+            tableName: faculty

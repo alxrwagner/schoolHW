@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-avatar
+      author: wagner
+      changes:
+        - createTable:
+            tableName: avatar
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: data
+                  type: oid
+              - column:
+                  name: file_path
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_size
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: media_type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: student_id
+                  type: bigint
+                  constraints:
+                    foreignKey: student
+                    nullable: false
