@@ -82,7 +82,7 @@ public class StudentController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<StudentDTO>> getAllStudents(@PageableDefault(size = 10) Pageable pageable) {
+    public ResponseEntity<List<StudentDTO>> getAllStudents(@PageableDefault(size = 50) Pageable pageable) {
         List<StudentDTO> studentDTOS = ss.getAllStudents(pageable);
         return ResponseEntity.ok(studentDTOS);
     }
