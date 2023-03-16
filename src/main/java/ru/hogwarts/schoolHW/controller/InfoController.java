@@ -11,10 +11,14 @@ public class InfoController {
 
     @Value("${app.env}")
     private String env;
+    @Value("${app.version}")
+    private String version;
+    @Value("${app.name}")
+    private String name;
 
     @GetMapping("/appinfo")
     public AppInfoDTO getAppInfo(){
-        AppInfo appInfo = new AppInfo("hogwarts-school", "0.0.1", env);
+        AppInfo appInfo = new AppInfo(version, name, env);
         return AppInfoDTO.fromAppInfo(appInfo);
     }
 }
