@@ -1,5 +1,7 @@
 package ru.hogwarts.schoolHW.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import ru.hogwarts.schoolHW.dto.StudentDTO;
 import ru.hogwarts.schoolHW.model.Avatar;
 import ru.hogwarts.schoolHW.model.Student;
 import ru.hogwarts.schoolHW.repository.AvatarRepository;
+import ru.hogwarts.schoolHW.repository.FacultyRepository;
 import ru.hogwarts.schoolHW.repository.StudentRepository;
 
 import java.io.*;
@@ -26,6 +29,8 @@ public class AvatarService {
 
     private final AvatarRepository avatarRepository;
     private final StudentService studentService;
+    static final Logger logger = LoggerFactory.getLogger(AvatarService.class);
+
 
     public AvatarService(AvatarRepository avatarRepository, StudentService studentService) {
         this.avatarRepository = avatarRepository;
@@ -34,6 +39,8 @@ public class AvatarService {
 
     @Transactional
     public void uploadAvatar(Long studentId, MultipartFile file) throws IOException {
+        logger.info("Was invoke method for upload avatar");
+
         Student student = studentService.findStudent(studentId).toStudent();
 
         Path filePath = Path.of(avatarsDir, studentId + "." + getExtension(file.getOriginalFilename()));
@@ -67,6 +74,8 @@ public class AvatarService {
 
     @Transactional
     public AvatarDTO findByStudentId(Long id) {
+        logger.info("Was invoke method for find avatar bi student's ID");
+
         return AvatarDTO.fromAvatar(avatarRepository.findByStudentId(id).orElse(new Avatar()));
     }
 }
