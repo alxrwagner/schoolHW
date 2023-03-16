@@ -7,7 +7,7 @@ import ru.hogwarts.schoolHW.dto.AppInfoDTO;
 import ru.hogwarts.schoolHW.model.AppInfo;
 
 @RestController
-public class infoController {
+public class InfoController {
 
     @Value("${app.env}")
     private String env;
