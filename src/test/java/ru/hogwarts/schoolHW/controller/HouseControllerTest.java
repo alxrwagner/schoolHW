@@ -111,21 +111,25 @@ class HouseControllerTest {
     void whenGetFacultyByColor_ThenStatus200IfNameAndColorIsNotNull() throws Exception {
         mockMvcFaculty.perform(get("/faculty?color=" + faculty.getColor() + "&name=" + faculty.getName()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].name").value(faculty.getName()))
+                .andExpect(jsonPath("$[0].color").value(faculty.getColor()));
     }
 
     @Test
     void whenGetFacultyByColor_ThenStatus200IfNameIsNotNull() throws Exception {
         mockMvcFaculty.perform(get("/faculty?color=null" + "&name=" + faculty.getName()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].name").value(faculty.getName()));
     }
 
     @Test
     void whenGetFacultyByColor_ThenStatus200IfColorIsNotNull() throws Exception {
         mockMvcFaculty.perform(get("/faculty?color=" + faculty.getColor() + "&name=null"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$[0].color").value(faculty.getColor()));
     }
 
     @Test
