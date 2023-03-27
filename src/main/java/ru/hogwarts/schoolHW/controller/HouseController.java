@@ -57,13 +57,13 @@ public class HouseController {
         if (color != null && name != null){
             return ResponseEntity.ok(Stream.of(hs.getFacultyByColor(color), hs.findByName(name)).flatMap(Collection::stream).distinct().collect(Collectors.toList()));
         }
-        if (color != null){
+        if (color != null && name == null){
             return ResponseEntity.ok(hs.getFacultyByColor(color));
         }
-        if(name != null){
+        if(name != null && color == null){
             return ResponseEntity.ok(hs.findByName(name));
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("{id}/students")

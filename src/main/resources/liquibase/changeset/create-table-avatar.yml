@@ -15,10 +15,10 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: data
-                  type: oid
+                  type: longvarbinary
               - column:
                   name: file_path
-                  type: text
+                  type: varchar(255)
                   constraints:
                     nullable: false
               - column:

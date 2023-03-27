@@ -10,6 +10,7 @@ import ru.hogwarts.schoolHW.dto.StudentDTO;
 import ru.hogwarts.schoolHW.model.Student;
 import ru.hogwarts.schoolHW.service.StudentService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -56,13 +57,10 @@ public class StudentController {
                                                              @PageableDefault(size = 50) Pageable pageable) {
         if (min != null && max != null) {
             return ResponseEntity.ok(ss.findByAgeBetween(min, max));
-        } else if (min != null) {
+        } else if (min != null && max == null) {
             return ResponseEntity.ok(ss.getByAge(min));
-        } else if (min == null && max == null) {
-            List<StudentDTO> studentDTOS = ss.getAllStudents(pageable);
-            return ResponseEntity.ok(studentDTOS);
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok(ss.getAllStudents(pageable));
     }
 
     @GetMapping("/{id}/faculty")

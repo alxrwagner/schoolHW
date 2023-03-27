@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hogwarts.schoolHW.dto.FacultyDTO;
 import ru.hogwarts.schoolHW.dto.StudentDTO;
+import ru.hogwarts.schoolHW.model.Faculty;
 import ru.hogwarts.schoolHW.model.Student;
 import ru.hogwarts.schoolHW.repository.FacultyRepository;
 import ru.hogwarts.schoolHW.repository.StudentRepository;
@@ -51,10 +52,13 @@ public class StudentService {
 
     @Transactional
     public StudentDTO editStudent(StudentDTO studentDTO) {
-        logger.info("Was invoke method for edit student");
-
+        logger.info("Updating a student");
+        Faculty faculty = facultyRepository.findById(studentDTO.getFacultyId()).get();
         Student student = studentDTO.toStudent();
-        return StudentDTO.fromStudent(studentRepository.save(student));
+        student.setFaculty(faculty);
+        Student updatedStudent = studentRepository.save(student);
+        logger.info("Student has been updated");
+        return StudentDTO.fromStudent(updatedStudent);
     }
 
     @Transactional
@@ -69,8 +73,7 @@ public class StudentService {
         logger.info("Was invoke method for find student by age");
 
         List<Student> students = studentRepository.findByAge(age);
-        List<StudentDTO> studentDTOs = new ArrayList<>();
-        return studentDTOs = students.stream().map(StudentDTO::fromStudent).collect(Collectors.toList());
+        return students.stream().map(StudentDTO::fromStudent).collect(Collectors.toList());
     }
 
     @Transactional
@@ -78,8 +81,7 @@ public class StudentService {
         logger.info("Was invoke method for find student by age between");
 
         List<Student> students = studentRepository.findByAgeBetween(min, max);
-        List<StudentDTO> studentDTOs = new ArrayList<>();
-        return studentDTOs = students.stream().map(StudentDTO::fromStudent).collect(Collectors.toList());
+        return students.stream().map(StudentDTO::fromStudent).collect(Collectors.toList());
     }
 
     @Transactional
