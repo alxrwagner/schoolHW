@@ -3,14 +3,16 @@ package ru.hogwarts.schoolHW.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import ru.hogwarts.schoolHW.config.TestConfig;
 import ru.hogwarts.schoolHW.model.Faculty;
 import ru.hogwarts.schoolHW.model.Student;
 import ru.hogwarts.schoolHW.repository.FacultyRepository;
@@ -22,8 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class StudentControllerTest {
+@Testcontainers
+class StudentControllerTest extends TestConfig {
 
     @Autowired
     ObjectMapper objectMapper;
@@ -60,6 +62,12 @@ class StudentControllerTest {
 
     }
 
+    @AfterEach
+    void tearDown() {
+        facultyRepository.deleteAll();
+        studentRepository.deleteAll();
+    }
+
     @Test
     void whenUserAdded_thenItExistsInList() throws Exception {
 
@@ -82,7 +90,7 @@ class StudentControllerTest {
     void whenFindStudentById_ThenGetStudent() throws Exception {
         mockMvc.perform(get("/student/" + student.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.id").value(student.getId()))
                 .andExpect(jsonPath("$.name").value("TestStudentName"));
     }
 
@@ -112,7 +120,7 @@ class StudentControllerTest {
         mockMvc.perform(get("/student"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$.length()").value(studentRepository.getCountStudents()))
                 .andExpect(jsonPath("$[1].name").value("TestName"))
                 .andExpect(jsonPath("$[1].age").value(37))
                 .andExpect(jsonPath("$[1].facultyId").value(faculty.getId()));

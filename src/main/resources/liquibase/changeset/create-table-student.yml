@@ -8,7 +8,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: long
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -25,6 +25,6 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: faculty_id
-                  type: long
+                  type: bigint
                   constraints:
                     foreignKey: faculty

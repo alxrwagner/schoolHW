@@ -2,16 +2,20 @@ package ru.hogwarts.schoolHW.controller;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import ru.hogwarts.schoolHW.config.TestConfig;
 import ru.hogwarts.schoolHW.model.Faculty;
 import ru.hogwarts.schoolHW.repository.FacultyRepository;
 
@@ -21,8 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class HouseControllerTest {
+@Testcontainers
+class HouseControllerTest extends TestConfig {
 
     @Autowired
     FacultyRepository facultyRepository;
@@ -42,12 +46,16 @@ class HouseControllerTest {
         jsonObjectFaculty.put("name", "Cast");
         jsonObjectFaculty.put("color", "black");
     }
+    @AfterEach
+    void tearDown(){
+        facultyRepository.deleteAll();
+    }
 
     @Test
     void whenFindFacultyById_ThenGetFaculty() throws Exception {
         mockMvcFaculty.perform(get("/faculty/" + faculty.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.id").value(faculty.getId()))
                 .andExpect(jsonPath("$.name").value("Alchemy"));
     }
 
@@ -139,6 +147,7 @@ class HouseControllerTest {
         mockMvcFaculty.perform(get("/faculty?color=null&name=null"))
                 .andExpect(status().isOk());
     }
+
     @Test
     void getStudentsByFacultyId() throws Exception {
         mockMvcFaculty.perform(get("/faculty/" + faculty.getId() + "/students"))
