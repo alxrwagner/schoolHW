@@ -13,7 +13,6 @@ import ru.hogwarts.schoolHW.model.Student;
 import ru.hogwarts.schoolHW.repository.FacultyRepository;
 import ru.hogwarts.schoolHW.repository.StudentRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
