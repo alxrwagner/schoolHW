@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-student
+      author: wagner
+      changes:
+        - createTable:
+            tableName: student
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: age
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: faculty_id
+                  type: bigint
+                  constraints:
+                    foreignKey: faculty

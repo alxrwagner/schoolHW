@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/changeset/create-table-faculty.yml
+  - include:
+      file: liquibase/changeset/create-table-student.yml
+  - include:
+      file: liquibase/changeset/create-table-avatar.yml
+  - include:
+      file: liquibase/changeset/add-constraint-uniq-faculty-name.yml
+  - include:
+      file: liquibase/changeset/add-check-student-age.sql
